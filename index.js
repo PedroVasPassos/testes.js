@@ -1,5 +1,10 @@
+//string de conexão com o mongo
+//mongodb+srv://usuario_mongo:<db_password>@cluster0.gspar.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+
 const express = require ("express")
 const cors = require ('cors')
+const mongose = require('mongoose')
 const app = express()
 
 app.use(express.json())
