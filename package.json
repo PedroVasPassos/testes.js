@@ -14,7 +14,7 @@
     "express": "^4.21.0",
     "frontend-0110": "file:",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.7.1"
+    "mongoose": "^8.7.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

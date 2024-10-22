@@ -1,43 +1,43 @@
-//string de conexão com o mongo
-//mongodb+srv://usuario_mongo:<db_password>@cluster0.gspar.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
-
-const express = require ("express")
-const cors = require ('cors')
-const mongose = require('mongoose')
+const express = require("express")
+const cors = require('cors')
+const mongoose = require('mongoose')
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 
-//get http://localhost:3000/oi
-app.get("/oi", (req, res) => {
-    res.send("oi")
-})
+const Filme = mongoose.model("Filme", mongoose.Schema({
+    titulo: { type: String },
+    sinopse: { type: String }
+}))
 
-let filmes = [
-    {
-        titulo: "Deadpool",
-        sinopse: "Ex-militar e mercenário, Wade Wilson (Ryan Reynolds) é diagnosticado com câncer em estado terminal, porém encontra uma possibilidade de cura em uma sinistra experiência científica. Recuperado, com poderes e um incomum senso de humor, ele torna-se Deadpool e busca vingança contra o homem que destruiu sua vida."
-    },
-    {
-        titulo: "Barbie",
-        sinopse: "Excêntrica e individualista, Barbie é exilada da Barbieland por causa de suas imperfeições. Quando seu mundo natal está em perigo, Barbie retorna com o conhecimento de que o que a torna diferente também a torna mais forte."
-    }
-]
+async function conectarAoMongo() {
+    await mongoose.connect(`mongodb+srv://pedro:123_456@cluster0.vixpx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+}
 
-app.get("/filmes", (req, res) => {res.json(filmes)})
+app.get("/filmes", async (req, res) => {
+    const filmes = await Filme.find()
+    res.json(filmes) })
 
-app.post("/filmes", (req,res) => {
+app.post("/filmes", async (req, res) => {
     //captura o que o usuario enviou
     const titulo = req.body.titulo
     const sinopse = req.body.sinopse
-    //monta o objeto filme para incluir na base 
-    const filme = {titulo: titulo, sinopse: sinopse}
-    //adiciona um novo filme à lista de filmes
-    filmes.push(filme)
-    //mostra a base atualizada
+    //montar um objeto de acordo com o modelo Filme
+    const filme = new Filme({titulo: titulo, sinopse: sinopse})
+    await filme.save()
+    const filmes = await Filme.find()
     res.json(filmes)
 })
 
-app.listen(3000,()=>console.log("up and running"))
+app.listen(3000, () => {
+    try {
+        conectarAoMongo()
+        console.log("server up and running e conexão ok");
+    }
+    catch (e) {
+    console.log('erro na conexão', e)
+    }}
+)
+
