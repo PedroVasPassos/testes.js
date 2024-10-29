@@ -1,10 +1,10 @@
 {
   "name": "frontend-0110",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "backend.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon backend.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,8 @@
     "express": "^4.21.0",
     "frontend-0110": "file:",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.7.2"
+    "mongoose": "^8.7.2",
+    "mongoose-unique-validator": "^4.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
