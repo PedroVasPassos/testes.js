@@ -1,6 +1,22 @@
 const protocolo = 'http://'
 const baseURL = 'localhost:3000'
 
+function exibeAlerta (seletor, innerHTML, classesToAdd, classesToRemove, timeout) {
+    let alert = document.querySelector(seletor)
+    alert.innerHTML = innerHTML
+    alert.classList.add (...classesToAdd)
+    alert.classList.remove (...classesToRemove)
+    setTimeout(() => {
+        alert.classList.remove(...classesToAdd)
+        alert.classList.add (...classesToRemove)
+    }, timeout)
+}
+function escondeModal (idModal, timeout) {
+    setTimeout (() => {
+    let modalCadastro = bootstrap.Modal.getInstance(document.querySelector(idModal))
+    modal.hide()
+    }, timeout)
+}
 
 function listarFilmes (filmes) {
     let tabela = document.querySelector('.filmes')
@@ -35,13 +51,7 @@ async function cadastrarFilme() {
         listarFilmes(filmes)
     }
     else {
-        let alert = document.querySelector('.alert')
-        alert.classList.add('show')
-        alert.classList.remove('d-none')
-        setTimeout(() => {
-            alert.classList.remove('show')
-            alert.classList.add('d-none')
-        }, 3000)
+        exibeAlerta('.alert-filme', "Preencha todos os campos!!!", ['alert-danger', 'show'], ['d-none'], 3000)
     }
 } 
 async function cadastrarUsuario() {
@@ -54,48 +64,24 @@ async function cadastrarUsuario() {
             const cadastroEndpoit = '/signup'
             const URLcompleta = `${protocolo}${baseURL}${cadastroEndpoit}`
             await axios.post(URLcompleta, {login: usuarioCadastro, password: passwordCadastro})
+
             usuarioCadastroInput.value = ""
             passwordCadastroInput.value = ""
 
-            //aviso de cadastro com sucesso
+            exibeAlerta('.alert-modal-cadastro', "Usuário cadastrado com sucesso!!!", ['show', 'alert-success'], ['d-none'], 3000)
 
-                let alert = document.querySelector('.alert-modal-cadastro')
-                alert.innerHTML = "Usuário cadastrado com sucesso!!!"
-                alert.classList.add ('show', 'alert-success')
-                alert.classList.remove ('d-none')
-                setTimeout(() => {
-                    alert.classList.remove('show', 'alert-success')
-                    alert.classList.add ('d-none')
-                    let modalCadastro = bootstrap.Modal.getInstance(document.querySelector('#modalCadastro'))
-                    modalCadastro.hide()
-                }, 3000)
+            escondeModal('#modalCadastro', 3000)
+
         }
         catch (e) {
 
-            //aviso de falha de cadastro
-            usuarioCadastroInput.value = ""
-            passwordCadastroInput.value = ""
-                let alert = document.querySelector('.alert-modal-cadastro')
-                alert.innerHTML = "Não foi possivel realizar o cadastro!!!"
-                alert.classList.add ('show', 'alert-danger')
-                alert.classList.remove ('d-none')
-                setTimeout(() => {
-                    alert.classList.remove('show', 'alert-danger')
-                    alert.classList.add ('d-none')
-                    let modalCadastro = bootstrap.Modal.getInstance(document.querySelector('#modalCadastro'))
-                    modalCadastro.hide()
-                }, 3000)
+            exibeAlerta('.alert-modal-cadastro', "Não foi possivel realizar o cadastro!!!", ['show', 'alert-danger'], ['d-none'], 3000)
+
+            escondeModal('#modalCadastro', 3000)
         }
     }
     else {
-        let alert = document.querySelector('.alert-modal-cadastro')
-        alert.innerHTML = "Preencha todos os campos!"
-        alert.classList.add ('show', 'alert-danger')
-        alert.classList.remove ('d-none')
-        setTimeout(() => {
-            alert.classList.remove('show', 'alert-danger')
-            alert.classList.add ('d-none')
-        }, 3000)
+        exibeAlerta('.alert-modal-cadastro', "Preencha todos os campos!!!", ['show', 'alert-danger'], ['d-none'], 3000)
     }
 
 }
